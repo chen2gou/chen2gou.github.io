@@ -20,6 +20,7 @@ timezone:
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
+future: true
 
 title: 爱喝馄饨的小陈                          # the main title
 
@@ -40,8 +41,8 @@ twitter:
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: your_full_name
-  email: example@doamin.com             # change to your email address
+  name: chengao
+  email: jbhay@foxmail.com             # change to your email address
   links:
     # The first element serves as the copyright owner's link
     - https://twitter.com/username      # change to your twitter homepage
@@ -100,10 +101,10 @@ comments:
   # Giscus options › https://giscus.app
   giscus:
     repo: chen2gou/chen2gou.github.io           # <gh-username>/<repo>
-    repo_id:
-    category:
-    category_id:
-    mapping:          # optional, default to 'pathname'
+    repo_id: R_kgDOG2L1lQ
+    category: General
+    category_id: DIC_kwDOG2L1lc4CBLyx
+    mapping: title         # optional, default to 'pathname'
     input_position:   # optional, default to 'bottom'
     lang:             # optional, default to the value of `site.lang`
 
