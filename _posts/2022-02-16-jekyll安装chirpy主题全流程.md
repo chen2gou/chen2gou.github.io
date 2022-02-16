@@ -1,5 +1,5 @@
 ---
-title: jekyll安装chirpy全流程
+title: jekyll安装chirpy主题全流程
 date: 2022-02-16 15:20:20
 tags: 博客
 ---
