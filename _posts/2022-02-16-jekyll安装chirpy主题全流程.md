@@ -1,7 +1,7 @@
 ---
 title: jekyll安装chirpy主题全流程
 date: 2022-02-16 15:20:20
-tags: 博客
+tags: 博客 jekyll
 ---
 
 ## 安装jekyll
@@ -12,9 +12,8 @@ tags: 博客
 
 ![首页](/img/2022/chripy_home.png)
 
-> 注意点：项目fork后需要修改Gemfile的源地址，`source "https://gems.ruby-china.com"`，这时候运行`bundle`会安装相关依赖,运行`jekyll s`即可看到初始化首页。
+> 注意点：项目fork后需要修改Gemfile的源地址，`source "https://gems.ruby-china.com"`，这时候运行`bundle`会安装相关依赖,运行`jekyll s`即可看到初始化首页，`_config.yml`中配置`livereload: true`,然后运行`jekyll serve --force_polling`可以开启实时预览。
 {: .prompt-warning }
-
 
 ## 博客配置
 
