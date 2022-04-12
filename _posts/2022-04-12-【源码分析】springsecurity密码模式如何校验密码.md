@@ -1,5 +1,5 @@
 ---
-title: 【源码分析】springsecurity密码模式是如何校验密码
+title: 【源码分析】springsecurity密码模式校验密码
 date: 2022-04-12 09:39:00 +0800
 tags: springsecurity oauth2
 ---
@@ -16,6 +16,7 @@ userAuth = this.authenticationManager.authenticate(userAuth);
 
 用户可自行定义granter类继承AbstractTokenGranter，重写getOAuth2Authentication()方法，并将该granter类添加至CompositeTokenGranter中。五种实现类如下图：
 ![asd](/img/2022/granter实现.png)
+
 
 
 ## 密码模式源码分析
