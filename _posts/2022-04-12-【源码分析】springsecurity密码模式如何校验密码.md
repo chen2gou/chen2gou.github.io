@@ -37,7 +37,11 @@ return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication
 
 ## 密码校验
 **AbstractUserDetailsAuthenticationProvider**中authenticate方法
+先去获取用户信息，调用自定义的UserDetailsService中loadUserByUsername方法，然后在对密码进行校验操作
 ```
+    //获取用户信息
+    user = retrieveUser(username,(UsernamePasswordAuthenticationToken) authentication);
+     …… ……
     this.preAuthenticationChecks.check(user);
     #用于校验密码
     this.additionalAuthenticationChecks(user, (UsernamePasswordAuthenticationToken)authentication);
