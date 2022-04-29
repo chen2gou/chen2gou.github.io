@@ -151,7 +151,7 @@ docker build -t keking/kkfileview:v4.0.0 .
 
 //docker启动 并且可以传入配置文件中对应变量
 docker run --restart=always -d \
- -e KK_BASE_URL="https://预览地址" \
+ -e KK_BASE_URL="https://预览地址/kkfile" \
  -e KK_CONTEXT_PATH="/kkfile" \
  -it -p 8012:8012  --name kkfile keking/kkfileview:v4.0.0
  
