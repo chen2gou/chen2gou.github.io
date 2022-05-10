@@ -166,9 +166,38 @@ docker run --restart=always -d \
 }
 
 ```
+#### docker拓展：
+每次打包时间较长，可以采用映射文件夹，替换jar包方式来进行更新。通过查看Dockerfile可以确定容器内`/opt/kkFileView-4.1.0-SNAPSHOT`,存放jar包和配置文件。
+    
+```
+ENTRYPOINT ["java","-Dfile.encoding=UTF-8","-Dspring.config.location=/opt/kkFileView-4.1.0-SNAPSHOT/config/application.properties","-jar","/opt/kkFileView-4.1.0-SNAPSHOT/bin/kkFileView-4.1.0-SNAPSHOT.jar"]
+```
+
+在宿主机内新建文件夹并在内部创建bin和config文件夹，并在创建容器的时候进行映射，之后每次编译后将jar包放入bin，配置文件放入config即可，可随时方便的修改配置文件了，同时下载和转换后的文件存在于同目录的file文件夹下。
+```
+docker run --restart=always -d \
+ -e KK_BASE_URL="https://预览地址/kkfile" \
+ -e KK_CONTEXT_PATH="/kkfile" \
+ -v 宿主机文件夹:/opt/kkFileView-4.1.0-SNAPSHOT \
+ -it -p 8012:8012  --name kkfile keking/kkfileview:v4.0.0
+```  
 
 2.源码编译上传，修改配置文件，运行bin中的start.sh启动，会自动安装libreoffice以及启动项目。（目前还未尝试）
 
 ## 效果展示
 
 ![](/media/16503324978050/16510243592444.jpg)
+
+
+## 后续问题
+1. 虽然禁用下载按钮了，但是页面可以ctrl+s下载问题，定位到是pdf.js的问题，修改view.js源码,注释掉对应代码。
+```
+ if (cmd === 1 || cmd === 8) {
+    switch (evt.keyCode) {
+      case 83:
+        // eventBus.dispatch("download", {
+        //   source: window
+        // });
+        // handled = true;
+        break;
+```
