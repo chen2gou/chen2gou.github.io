@@ -201,3 +201,19 @@ docker run --restart=always -d \
         // handled = true;
         break;
 ```
+
+2. ctrl+p打印依然可以保存文件,修改view.js源码,注释掉对应代码。
+```
+window.addEventListener("keydown", function (event) {
+  if (event.keyCode === 80 && (event.ctrlKey || event.metaKey) && !event.altKey && (!event.shiftKey || window.chrome || window.opera)) {
+    // window.print();
+    event.preventDefault();
+
+    if (event.stopImmediatePropagation) {
+      event.stopImmediatePropagation();
+    } else {
+      event.stopPropagation();
+    }
+  }
+}, true);
+```
