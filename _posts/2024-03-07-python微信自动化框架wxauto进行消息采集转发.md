@@ -179,3 +179,9 @@ if __name__ == '__main__':
 ## 常见问题
 - 报错 一般是python版本号问题
 - 此工具需要保持远程连接，前台运行hook，windows自带工具不可用，本人使用todesk，其他软件自行搜索
+- 远程桌面亦可，不过需要断开连接使用脚本保证不退出桌面，新建 exit.bat，每次点击脚本退出
+``` exit.bat
+@echo off
+for %%i in (0,1,2,3,4,5,6,7,8,9) do (tscon %%i /dest:console )
+
+```
