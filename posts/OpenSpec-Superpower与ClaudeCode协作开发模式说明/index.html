@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="zh-CN" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.1" /><meta property="og:title" content="OpenSpec、Superpower 与 Claude Code 协作开发模式说明" /><meta property="og:locale" content="zh_CN" /><meta name="description" content="1. 目标" /><meta property="og:description" content="1. 目标" /><link rel="canonical" href="/posts/OpenSpec-Superpower%E4%B8%8EClaudeCode%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E8%AF%B4%E6%98%8E/" /><meta property="og:url" content="/posts/OpenSpec-Superpower%E4%B8%8EClaudeCode%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E8%AF%B4%E6%98%8E/" /><meta property="og:site_name" content="爱喝馄饨的小陈" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2026-07-07T16:50:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="OpenSpec、Superpower 与 Claude Code 协作开发模式说明" /><meta name="twitter:site" content="@twitter_username" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-07-07T16:50:00+08:00","datePublished":"2026-07-07T16:50:00+08:00","description":"1. 目标","headline":"OpenSpec、Superpower 与 Claude Code 协作开发模式说明","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/OpenSpec-Superpower%E4%B8%8EClaudeCode%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E8%AF%B4%E6%98%8E/"},"url":"/posts/OpenSpec-Superpower%E4%B8%8EClaudeCode%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E8%AF%B4%E6%98%8E/"}</script><title>OpenSpec、Superpower 与 Claude Code 协作开发模式说明 | 爱喝馄饨的小陈</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="爱喝馄饨的小陈"><meta name="application-name" content="爱喝馄饨的小陈"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src=" /img/avatar.jpg " alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">爱喝馄饨的小陈</a></div><div class="site-subtitle font-italic">偷懒是第一生产力</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>首页</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>分类</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>标签</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>归档</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>关于</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/github_username" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['jbhay','foxmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> 首页 </a> </span> <span>OpenSpec、Superpower 与 Claude Code 协作开发模式说明</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> 文章</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="搜索..."> </span> <span id="search-cancel" >取消</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>OpenSpec、Superpower 与 Claude Code 协作开发模式说明</h1><div class="post-meta text-muted"><div> 作者 <em> <a href="https://twitter.com/username">chengao</a> </em></div><div class="d-flex"><div> <span> 发表于 <em class="timeago" data-ts="1783414200" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" > 2026-07-07 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="4358 字"> <em>24 分钟</em>阅读</span></div></div></div><div class="post-content"><h2 id="1-目标"><span class="mr-2">1. 目标</span><a href="#1-目标" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>本文档用于说明当前项目推荐的开发协作模式，重点明确：</p><ul><li>OpenSpec 的作用和边界<li>Superpower 的作用和边界<li>Claude Code 在开发过程中的配合方式<li>以本次“动态数据权限与按钮控制”需求为例，说明完整流程</ul><p>核心原则：</p><ul><li>OpenSpec 负责“需求和规格是什么”<li>Superpower 负责“如何拆解和执行开发任务”<li>Claude Code 负责“理解上下文、生成方案、修改代码、运行验证”<li>Java 项目代码和正式文档进入 git<li>AI 临时过程文件不进入 git</ul><hr /><h2 id="2-openspec-的作用和边界"><span class="mr-2">2. OpenSpec 的作用和边界</span><a href="#2-openspec-的作用和边界" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><h3 id="21-openspec-是什么"><span class="mr-2">2.1 OpenSpec 是什么</span><a href="#21-openspec-是什么" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>OpenSpec 用于维护项目的正式规格说明，描述需求目标、行为约束、数据模型、接口契约和验收标准。</p><p>它不是临时计划，也不是聊天记录，而是可以长期维护、参与评审、随代码一起演进的项目资产。</p><p>项目地址：</p><div class="table-wrapper"><table><thead><tr><th>项目<th>Git 地址<th>说明<tbody><tr><td>OpenSpec<td>https://github.com/Fission-AI/OpenSpec<td>当前项目使用的 <code class="language-plaintext highlighter-rouge">openspec</code> CLI 来源，用于维护 spec-driven development 的 proposal、design、tasks 和 specs。</table></div><h3 id="22-openspec-适合记录什么"><span class="mr-2">2.2 OpenSpec 适合记录什么</span><a href="#22-openspec-适合记录什么" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>OpenSpec 适合记录以下内容：</p><ul><li>需求背景<li>业务目标<li>功能范围<li>核心规则<li>权限模型<li>状态流转<li>数据结构约束<li>接口行为约束<li>验收标准<li>与旧逻辑的兼容关系</ul><p>以本次需求为例，OpenSpec 可以记录：</p><ul><li>需要支持不同实体的动态按钮权限<li>按钮权限由规则表 <code class="language-plaintext highlighter-rouge">sys_action_rule</code> 驱动<li>权限结果需要根据当前用户和实体关系人动态计算<li><code class="language-plaintext highlighter-rouge">sys_action_rule</code> 只存静态规则，不缓存最终按钮权限结果<li>Story 列表和详情页需要接入按钮权限<li>评论使用通用主体 <code class="language-plaintext highlighter-rouge">COMMENT</code><li>Story 的 <code class="language-plaintext highlighter-rouge">关闭</code>、<code class="language-plaintext highlighter-rouge">重新打开</code> 在 SQL 中保持通用动作名，页面展示文案由前端按场景处理</ul><h3 id="23-openspec-不适合记录什么"><span class="mr-2">2.3 OpenSpec 不适合记录什么</span><a href="#23-openspec-不适合记录什么" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>OpenSpec 不适合记录以下内容：</p><ul><li>AI 临时执行计划<li>每一步具体改哪个文件<li>中间调试过程<li>临时对话结论<li>一次性草稿<li>未确认的实现细节</ul><p>这些内容更适合放在 Superpower 的 plan 或 Claude Code 对话中。</p><h3 id="24-openspec-是否进入-git"><span class="mr-2">2.4 OpenSpec 是否进入 git</span><a href="#24-openspec-是否进入-git" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>建议进入 git。</p><p>原因：</p><ul><li>OpenSpec 是正式规格，属于项目资产<li>需求变更可以随代码一起追踪<li>Code Review 时可以同时审查规格和实现<li>后续维护人员可以通过规格理解代码设计原因</ul><p>推荐路径：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre>openspec/
+  changes/
+    add-dynamic-entity-action-permissions/
+      proposal.md
+      tasks.md
+      specs/
+        dynamic-action-permissions/
+          spec.md
+</pre></table></code></div></div><p>或者后续也可以统一收敛到：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>docs/openspec/
+</pre></table></code></div></div><p>当前项目已经使用 <code class="language-plaintext highlighter-rouge">openspec/</code>，因此可以继续保留该目录并纳入 git。</p><hr /><h2 id="3-superpower-的作用和边界"><span class="mr-2">3. Superpower 的作用和边界</span><a href="#3-superpower-的作用和边界" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><h3 id="31-superpower-是什么"><span class="mr-2">3.1 Superpower 是什么</span><a href="#31-superpower-是什么" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>Superpower 是 Claude Code 的开发流程辅助工具，主要用于把已经明确的需求拆解成可执行的开发计划，并约束执行过程。</p><p>它关注的是“如何开发”，而不是“需求本身是什么”。</p><p>项目地址：</p><div class="table-wrapper"><table><thead><tr><th>项目<th>Git 地址<th>说明<tbody><tr><td>Superpowers<td>https://github.com/obra/superpowers<td>Claude Code 等 coding agent 的技能与开发方法论插件，覆盖 brainstorming、TDD、debugging、plan execution、code review 等流程。</table></div><h3 id="32-superpower-适合做什么"><span class="mr-2">3.2 Superpower 适合做什么</span><a href="#32-superpower-适合做什么" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>Superpower 适合用于：</p><ul><li>需求澄清后的方案设计<li>编写实现计划<li>拆分开发任务<li>强制 TDD 流程<li>执行计划<li>代码评审<li>验证完成情况</ul><p>以本次需求为例，Superpower plan 可以拆成：</p><ol><li>新增按钮权限枚举和上下文模型<li>新增 <code class="language-plaintext highlighter-rouge">sys_action_rule</code> 表和初始化 SQL<li>新增按钮权限计算工具<li>Story 列表接入按钮权限<li>Story 详情接入按钮权限<li>新增 Redis 缓存服务<li>调整 <code class="language-plaintext highlighter-rouge">checkAllowed()</code> 走缓存<li>补充单元测试</ol><h3 id="33-superpower-不适合做什么"><span class="mr-2">3.3 Superpower 不适合做什么</span><a href="#33-superpower-不适合做什么" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>Superpower 不适合作为正式项目文档长期维护。</p><p>原因：</p><ul><li>它偏向执行过程，而不是业务规格<li>内容可能包含阶段性计划、临时结论、调试记录<li>会随着 AI 执行方式变化而变化<li>不一定适合人工长期阅读和评审</ul><p>因此，Superpower plan 建议作为本地临时文件，不进入 git。</p><p>推荐路径：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre>.superpower/
+  plans/
+    2026-07-01-action-rule-redis-cache.md
+    2026-07-01-story-action-permissions.md
+</pre></table></code></div></div><p><code class="language-plaintext highlighter-rouge">.gitignore</code> 中应包含：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>.superpower/
+.superpowers/
+.claude/
+</pre></table></code></div></div><hr /><h2 id="4-openspec-和-superpower-的边界"><span class="mr-2">4. OpenSpec 和 Superpower 的边界</span><a href="#4-openspec-和-superpower-的边界" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>二者可以这样区分：</p><div class="table-wrapper"><table><thead><tr><th>项目<th>OpenSpec<th>Superpower<tbody><tr><td>核心问题<td>要做什么<td>怎么做<tr><td>面向对象<td>产品、研发、评审、维护人员<td>Claude Code、开发执行者<tr><td>生命周期<td>长期维护<td>阶段性使用<tr><td>是否进 git<td>建议进入<td>不建议进入<tr><td>内容类型<td>规格、规则、验收标准<td>实施步骤、任务拆解、执行记录<tr><td>变更方式<td>随需求变更更新<td>随开发过程生成和调整<tr><td>示例<td>按钮权限规则定义<td>第一步改枚举，第二步写测试</table></div><p>简单理解：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre>产品文档 / 需求讨论
+        ↓
+OpenSpec：沉淀正式规格
+        ↓
+Superpower：拆成可执行任务
+        ↓
+Claude Code：按任务修改代码和验证
+        ↓
+代码、测试、OpenSpec 一起进入 git
+</pre></table></code></div></div><hr /><h2 id="5-需求探讨阶段怎么选择工具"><span class="mr-2">5. 需求探讨阶段怎么选择工具</span><a href="#5-需求探讨阶段怎么选择工具" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><h3 id="51-需求不明确时怎么做"><span class="mr-2">5.1 需求不明确时怎么做</span><a href="#51-需求不明确时怎么做" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>需求不明确时，优先直接和 Claude Code 交互探讨。</p><p>例如：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>这个按钮权限需求，状态机和动态权限怎么分边界？
+</pre></table></code></div></div><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>sys_action_rule 和 sys_action_transition 是否都需要？帮我分析下。
+</pre></table></code></div></div><p>这类问题适合直接和 Claude Code 聊，因为 Claude Code 可以：</p><ul><li>读取现有代码<li>读取产品文档<li>对比当前实现<li>给出多个方案<li>逐步收敛设计</ul><p>这一步不一定马上落文档。只有形成稳定结论后，才需要沉淀到正式规格或 <code class="language-plaintext highlighter-rouge">docs/</code> 中。</p><h3 id="52-什么时候使用-opsxexplore"><span class="mr-2">5.2 什么时候使用 <code class="language-plaintext highlighter-rouge"><span class="mr-2">/opsx:explore</code></span><a href="#52-什么时候使用-opsxexplore" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p><code class="language-plaintext highlighter-rouge">/opsx:explore</code> 也可以用于探讨问题，但它更适合做“围绕 OpenSpec 上下文的需求探索和规格分析”。</p><p>它不是最终规格文档本身，而是进入 OpenSpec 工作流前后的探索入口，适合在以下场景使用：</p><ul><li>已经准备使用 OpenSpec 管理这个需求<li>需要围绕现有变更来讨论方案<li>需要检查某个需求是否已经被已有规格覆盖<li>需要分析新需求会影响哪些 capability、spec 或 change<li>需要把模糊需求逐步收敛到可写入规格的程度</ul><p>简单理解：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>直接 Claude Code 交互：自由讨论，最快
+/opsx:explore：结合 OpenSpec 上下文做需求探索
+Superpower brainstorming：完整设计流程，最重
+</pre></table></code></div></div><p><code class="language-plaintext highlighter-rouge">/opsx:explore</code> 适合用来回答：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>这个需求应该落到哪个 change？
+</pre></table></code></div></div><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>当前规格是否已经覆盖这个按钮权限规则？
+</pre></table></code></div></div><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>这个需求会影响哪些 spec？
+</pre></table></code></div></div><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>这个变更应该拆成一个 change，还是多个 change？
+</pre></table></code></div></div><p>它可以参与需求探讨，但讨论重点更偏 OpenSpec 体系内的规格分析，而不是完整产品设计流程。</p><h3 id="53-什么时候使用-superpower-brainstorming"><span class="mr-2">5.3 什么时候使用 Superpower brainstorming</span><a href="#53-什么时候使用-superpower-brainstorming" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>当需求较大、边界不清、可能影响多个模块时，可以使用 Superpower 的 <code class="language-plaintext highlighter-rouge">brainstorming</code>。</p><p>适合场景：</p><ul><li>设计一个动态权限体系<li>设计通用状态机体系<li>状态流转、按钮权限、数据权限需要分层<li>多个模块职责边界不清<li>需要拆分一期、二期或多个子项目</ul><p>推荐流程：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre>Superpower brainstorming
+  ↓
+输出设计文档
+  ↓
+正式规格沉淀
+  ↓
+Superpower writing-plans 拆任务
+  ↓
+Claude Code 实现和验证
+</pre></table></code></div></div><h3 id="54-三者在需求探讨阶段的分工"><span class="mr-2">5.4 三者在需求探讨阶段的分工</span><a href="#54-三者在需求探讨阶段的分工" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><div class="table-wrapper"><table><thead><tr><th>能力<th>直接 Claude Code 交互<th><code class="language-plaintext highlighter-rouge">/opsx:explore</code><th>Superpower brainstorming<tbody><tr><td>需求发散<td>强<td>中<td>强<tr><td>多方案比较<td>强<td>中<td>强<tr><td>结合现有代码分析<td>强<td>中<td>强<tr><td>结合现有规格分析<td>中<td>强<td>中<tr><td>强制澄清问题<td>中<td>中<td>强<tr><td>设计流程约束<td>弱<td>中<td>强<tr><td>规格沉淀前准备<td>弱<td>强<td>中<tr><td>流程成本<td>低<td>中<td>高<tr><td>适合场景<td>小问题和快速分析<td>OpenSpec 相关需求探索<td>大中型需求设计</table></div><p>更具体地说：</p><div class="table-wrapper"><table><thead><tr><th>场景<th>推荐工具<tbody><tr><td>想快速讨论一个技术或产品问题<td>直接 Claude Code 交互<tr><td>想确认一个需求在规格体系里怎么落位<td><code class="language-plaintext highlighter-rouge">/opsx:explore</code><tr><td>想检查现有 spec 是否覆盖某个需求<td><code class="language-plaintext highlighter-rouge">/opsx:explore</code><tr><td>需求很大、方案很多、边界不清<td>Superpower brainstorming<tr><td>已经明确要实现，需要拆任务<td>Superpower writing-plans</table></div><p>一句话：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>Claude Code 用来快速想，/opsx:explore 用来结合规格想，brainstorming 用来系统想，Superpower plan 用来做。
+</pre></table></code></div></div><h3 id="55-openspec-与-superpower-常用技能命令"><span class="mr-2">5.5 OpenSpec 与 Superpower 常用技能/命令</span><a href="#55-openspec-与-superpower-常用技能命令" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>OpenSpec 在当前项目中主要通过 <code class="language-plaintext highlighter-rouge">/opsx:*</code> 命令使用：</p><div class="table-wrapper"><table><thead><tr><th>命令<th>作用<th>适合场景<th>是否修改业务代码<tbody><tr><td><code class="language-plaintext highlighter-rouge">/opsx:explore</code><td>进入探索模式，围绕需求、现有代码和 OpenSpec 上下文分析问题<td>需求不清晰、需要讨论方案、需要判断需求落到哪个 spec/change<td>否<tr><td><code class="language-plaintext highlighter-rouge">/opsx:propose</code><td>创建一个新的 OpenSpec change，并生成 proposal、design、tasks 等工件<td>需求已基本明确，需要正式沉淀为可评审的规格变更<td>否，主要写规格工件<tr><td><code class="language-plaintext highlighter-rouge">/opsx:apply</code><td>按 OpenSpec change 中的 tasks 执行实现<td>规格和任务已经确认，需要开始编码实现<td>是<tr><td><code class="language-plaintext highlighter-rouge">/opsx:sync</code><td>将 change 中的规格变更同步回正式 specs<td>实现完成或需求稳定后，需要把 delta spec 合并到长期规格<td>否，主要改规格文件<tr><td><code class="language-plaintext highlighter-rouge">/opsx:archive</code><td>归档已完成的 change<td>change 已完成并同步，需要从 active changes 中归档<td>否，主要移动规格工件</table></div><p>Superpower 常用 skill 可以按开发阶段理解：</p><div class="table-wrapper"><table><thead><tr><th>Skill<th>作用<th>适合场景<th>关键约束/产出<tbody><tr><td><code class="language-plaintext highlighter-rouge">using-superpowers</code><td>启动 Superpowers 的总入口，判断是否需要调用具体 skill<td>任意任务开始前<td>有适用 skill 时必须先使用<tr><td><code class="language-plaintext highlighter-rouge">brainstorming</code><td>将模糊想法收敛为设计方案<td>大中型需求、边界不清、方案需要比较<td>用户确认设计前不写代码<tr><td><code class="language-plaintext highlighter-rouge">writing-plans</code><td>把已确认设计拆成可执行实现计划<td>规格或设计已经明确，需要进入开发排期<td>输出具体到文件、步骤、测试命令的 plan<tr><td><code class="language-plaintext highlighter-rouge">subagent-driven-development</code><td>用子代理按任务实现、评审、修复<td>已有完整 plan，任务可分阶段执行<td>每个任务后做代码评审，适合较大改动<tr><td><code class="language-plaintext highlighter-rouge">executing-plans</code><td>在当前会话中按 plan 顺序执行<td>已有完整 plan，但不使用子代理模式<td>按任务逐项执行并验证<tr><td><code class="language-plaintext highlighter-rouge">test-driven-development</code><td>强制先写失败测试，再写最小实现<td>新功能、Bug 修复、行为变更<td>没有失败测试前不写生产代码<tr><td><code class="language-plaintext highlighter-rouge">systematic-debugging</code><td>系统化定位根因再修复<td>测试失败、线上 Bug、构建失败、集成问题<td>先找根因，不做猜测式修复<tr><td><code class="language-plaintext highlighter-rouge">requesting-code-review</code><td>请求代码评审<td>完成任务、重要功能、合并前<td>让独立视角检查实现风险<tr><td><code class="language-plaintext highlighter-rouge">receiving-code-review</code><td>处理代码评审反馈<td>收到评审意见后<td>先核实再修改，不盲从也不表演式认同<tr><td><code class="language-plaintext highlighter-rouge">verification-before-completion</code><td>完成前做新鲜验证<td>声称测试通过、构建成功、任务完成前<td>没有最新验证证据就不声明完成<tr><td><code class="language-plaintext highlighter-rouge">finishing-a-development-branch</code><td>完成开发分支收尾<td>所有任务完成后<td>做最终验证、整理交付说明<tr><td><code class="language-plaintext highlighter-rouge">using-git-worktrees</code><td>使用 git worktree 隔离开发<td>明确需要隔离分支或并行工作区时<td>当前项目未明确要求时不主动使用<tr><td><code class="language-plaintext highlighter-rouge">dispatching-parallel-agents</code><td>并行分派多个 agent 做独立工作<td>多个互不冲突的搜索、分析或实现任务<td>需要明确任务边界，避免并行冲突<tr><td><code class="language-plaintext highlighter-rouge">writing-skills</code><td>编写或修改 Superpowers skill<td>需要开发新的 skill 或调整既有 skill<td>需要评估 skill 行为，不适合普通业务需求</table></div><hr /><h2 id="6-claude-code-的角色"><span class="mr-2">6. Claude Code 的角色</span><a href="#6-claude-code-的角色" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>Claude Code 在当前模式中承担执行助手角色，主要负责：</p><ol><li>阅读产品文档、OpenSpec 和现有代码<li>帮助澄清需求和边界<li>基于 OpenSpec 生成开发方案<li>使用 Superpower 拆分任务<li>按 TDD 流程新增或修改代码<li>运行 Maven 单测验证<li>根据反馈调整实现<li>生成提交信息和变更说明</ol><p>Claude Code 不应直接把一次对话中的临时结论当作正式规格。</p><p>重要需求结论应优先沉淀到 OpenSpec 或 <code class="language-plaintext highlighter-rouge">docs/</code> 下的正式文档中。</p><hr /><h2 id="7-当前需求示例动态数据权限与按钮控制"><span class="mr-2">7. 当前需求示例：动态数据权限与按钮控制</span><a href="#7-当前需求示例动态数据权限与按钮控制" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><h3 id="71-原始输入"><span class="mr-2">7.1 原始输入</span><a href="#71-原始输入" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>本次需求来源包括：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>docs/ITP优化.md
+docs/动态数据权限与按钮控制架构宣讲.md
+</pre></table></code></div></div><p>这些文档属于产品和架构输入，描述了业务背景、页面按钮、动态权限和状态流转等内容。</p><h3 id="72-规格沉淀"><span class="mr-2">7.2 规格沉淀</span><a href="#72-规格沉淀" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>基于原始文档讨论：</p><p><img data-src="/img/2026/07/openspec-superpower-claude-code-3.png" alt="OpenSpec 需求讨论示意" data-proofer-ignore></p><p>将需求沉淀到 OpenSpec：</p><p><img data-src="/img/2026/07/openspec-superpower-claude-code-2.png" alt="OpenSpec 规格沉淀示意" data-proofer-ignore></p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre>openspec/changes/add-dynamic-entity-action-permissions/
+  proposal.md
+  tasks.md
+  specs/dynamic-action-permissions/spec.md
+</pre></table></code></div></div><p>OpenSpec 中应明确：</p><ul><li>支持实体维度的按钮权限规则<li>支持关系人维度的权限判断<li>支持 Story 列表和详情按钮权限<li>权限规则可通过 SQL 初始化<li>权限规则表 <code class="language-plaintext highlighter-rouge">sys_action_rule</code> 使用 <code class="language-plaintext highlighter-rouge">entity_type + action_code</code> 做唯一约束<li>按钮名称保持通用，不在同一个规则里区分页面场景<li>Story 详情页特殊文案由前端处理</ul><h3 id="73-任务拆解"><span class="mr-2">7.3 任务拆解</span><a href="#73-任务拆解" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>确认规格后，使用 Superpower 生成实现计划。</p><p><img data-src="/img/2026/07/openspec-superpower-claude-code-1.png" alt="Superpower 任务拆解示意" data-proofer-ignore></p><p>示例计划文件：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>.superpower/plans/2026-07-01-story-action-permissions.md
+.superpower/plans/2026-07-01-action-rule-redis-cache.md
+</pre></table></code></div></div><p>计划关注具体执行，例如：</p><ul><li>修改哪些 Java 类<li>新增哪些测试<li>先写哪个失败测试<li>再写哪个最小实现<li>执行哪些 Maven 命令验证</ul><h3 id="74-编码实现"><span class="mr-2">7.4 编码实现</span><a href="#74-编码实现" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>Claude Code 根据计划修改代码。</p><p>本次主要实现包括：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre><td class="rouge-code"><pre>itp-common/src/main/java/com/robotees/itp/enums/EntityTypeEnum.java
+itp-common/src/main/java/com/robotees/itp/enums/ActionTypeEnum.java
+itp-common/src/main/java/com/robotees/itp/enums/ActionRelationEnum.java
+itp-common/src/main/java/com/robotees/itp/util/ActionPermissionUtils.java
+itp-common/src/main/java/com/robotees/itp/util/ActionRelationContext.java
+itp-common/src/main/java/com/robotees/itp/utils/CacheKeyUtils.java
+itp-admin/src/main/java/com/robotees/itp/modules/biz/entity/SysActionRule.java
+itp-admin/src/main/java/com/robotees/itp/modules/biz/mapper/SysActionRuleMapper.java
+itp-admin/src/main/java/com/robotees/itp/modules/biz/service/ActionPermissionService.java
+itp-admin/src/main/java/com/robotees/itp/modules/biz/service/ActionRuleCacheService.java
+itp-admin/src/main/java/com/robotees/itp/modules/biz/service/impl/ActionPermissionServiceImpl.java
+itp-admin/src/main/java/com/robotees/itp/modules/biz/service/impl/ActionRuleCacheServiceImpl.java
+itp-admin/src/main/java/com/robotees/itp/modules/biz/service/impl/StoryServiceImpl.java
+itp-admin/src/main/resources/db.migration/V3__add_sys_action_rule.sql
+</pre></table></code></div></div><h3 id="75-测试验证"><span class="mr-2">7.5 测试验证</span><a href="#75-测试验证" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>本次配套测试包括：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre>itp-common/src/test/java/com/robotees/itp/util/ActionPermissionUtilsTest.java
+itp-common/src/test/java/com/robotees/itp/util/ActionRuleSqlTest.java
+itp-admin/src/test/java/com/robotees/itp/modules/biz/service/impl/ActionPermissionServiceImplTest.java
+itp-admin/src/test/java/com/robotees/itp/modules/biz/service/impl/ActionRuleCacheServiceImplTest.java
+itp-admin/src/test/java/com/robotees/itp/modules/biz/service/impl/StoryServiceImplPermissionTest.java
+</pre></table></code></div></div><p>推荐使用当前项目指定 Maven 执行测试：</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre>/usr/local/apache-maven-3.3.9/bin/mvn <span class="se">\</span>
+  <span class="nt">-s</span> /usr/local/apache-maven-3.3.9/conf/settings.xml <span class="se">\</span>
+  <span class="nt">-o</span> <span class="se">\</span>
+  <span class="nt">-f</span> pom.xml <span class="se">\</span>
+  <span class="nt">-pl</span> itp-admin <span class="se">\</span>
+  <span class="nt">-am</span> <span class="se">\</span>
+  <span class="nt">-Dtest</span><span class="o">=</span>ActionRuleCacheServiceImplTest,ActionPermissionServiceImplTest,StoryServiceImplPermissionTest <span class="se">\</span>
+  <span class="nt">-DfailIfNoTests</span><span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
+  <span class="nb">test</span>
+</pre></table></code></div></div><p>common 模块测试可执行：</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre>/usr/local/apache-maven-3.3.9/bin/mvn <span class="se">\</span>
+  <span class="nt">-s</span> /usr/local/apache-maven-3.3.9/conf/settings.xml <span class="se">\</span>
+  <span class="nt">-o</span> <span class="se">\</span>
+  <span class="nt">-f</span> pom.xml <span class="se">\</span>
+  <span class="nt">-pl</span> itp-common <span class="se">\</span>
+  <span class="nt">-Dtest</span><span class="o">=</span>ActionRuleSqlTest,ActionPermissionUtilsTest <span class="se">\</span>
+  <span class="nt">-DfailIfNoTests</span><span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
+  <span class="nb">test</span>
+</pre></table></code></div></div><hr /><h2 id="8-推荐协作流程"><span class="mr-2">8. 推荐协作流程</span><a href="#8-推荐协作流程" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><h3 id="81-新需求开发流程"><span class="mr-2">8.1 新需求开发流程</span><a href="#81-新需求开发流程" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>推荐流程如下：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre><td class="rouge-code"><pre>1. 收集原始产品文档
+2. Claude Code 阅读 docs 和现有代码
+3. 用户澄清需求边界
+4. 生成或更新 OpenSpec
+5. 用户确认 OpenSpec
+6. 使用 Superpower 生成实现计划
+7. 用户确认实现计划
+8. Claude Code 按计划 TDD 实现
+9. 运行单测和必要验证
+10. 更新正式文档
+11. 生成提交信息
+12. 提交代码
+</pre></table></code></div></div><h3 id="82-变更处理流程"><span class="mr-2">8.2 变更处理流程</span><a href="#82-变更处理流程" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>开发过程中如果发现需求变化，按以下方式处理：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre>小的实现细节变化：
+  直接调整代码和测试，必要时同步更新 Superpower plan
+
+影响行为或验收标准的变化：
+  先更新 OpenSpec，再调整代码
+
+影响产品理解的变化：
+  先更新 docs/product 或相关说明，再更新 OpenSpec
+</pre></table></code></div></div><h3 id="83-文件入库建议"><span class="mr-2">8.3 文件入库建议</span><a href="#83-文件入库建议" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>建议进入 git：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre>openspec/
+itp-common/
+itp-admin/
+pom.xml
+.gitignore
+</pre></table></code></div></div><p>不建议进入 git：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>.claude/
+.superpower/
+.superpowers/
+</pre></table></code></div></div><hr /><h2 id="9-当前项目建议目录结构"><span class="mr-2">9. 当前项目建议目录结构</span><a href="#9-当前项目建议目录结构" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre><td class="rouge-code"><pre>docs/
+  ITP优化.md
+  动态数据权限与按钮控制架构宣讲.md
+  开发模式说明.md
+
+openspec/
+  changes/
+    add-dynamic-entity-action-permissions/
+      proposal.md
+      tasks.md
+      specs/
+        dynamic-action-permissions/
+          spec.md
+
+.superpower/
+  plans/
+    2026-07-01-action-rule-redis-cache.md
+    2026-07-01-story-action-permissions.md
+</pre></table></code></div></div><p>说明：</p><ul><li><code class="language-plaintext highlighter-rouge">docs/</code> 保存产品文档和项目级说明<li><code class="language-plaintext highlighter-rouge">openspec/</code> 保存正式规格和变更说明<li><code class="language-plaintext highlighter-rouge">.superpower/</code> 保存 AI 辅助开发过程文件，不进入 git</ul><hr /><h2 id="10-实践原则"><span class="mr-2">10. 实践原则</span><a href="#10-实践原则" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><h3 id="101-先规格后实现"><span class="mr-2">10.1 先规格，后实现</span><a href="#101-先规格后实现" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>不要直接从一句需求开始写代码。</p><p>应该先明确：</p><ul><li>业务目标是什么<li>不做什么<li>数据边界是什么<li>谁来消费这个能力<li>验收标准是什么</ul><h3 id="102-规格和计划分离"><span class="mr-2">10.2 规格和计划分离</span><a href="#102-规格和计划分离" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>OpenSpec 写“系统应该具备什么行为”。</p><p>Superpower 写“为了实现这个行为，具体怎么改代码”。</p><p>不要把实现步骤写进 OpenSpec，也不要把正式业务规则只留在 Superpower plan 中。</p><h3 id="103-临时文件不入库"><span class="mr-2">10.3 临时文件不入库</span><a href="#103-临时文件不入库" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>AI 执行过程中产生的临时计划、工作树、对话上下文不进入 git。</p><p>它们可以帮助开发，但不是项目正式资产。</p><h3 id="104-测试结果必须明确"><span class="mr-2">10.4 测试结果必须明确</span><a href="#104-测试结果必须明确" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>Claude Code 完成修改后，应明确说明：</p><ul><li>执行了什么测试命令<li>测试是否通过<li>如果失败，失败原因是什么<li>是否有未验证的内容</ul><hr /><h2 id="11-一句话总结"><span class="mr-2">11. 一句话总结</span><a href="#11-一句话总结" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>当前推荐模式是：</p><div class="language-text highlighter-rouge"><div class="code-header"> <span data-label-text="Text"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="已复制！"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>用 docs 保存原始资料，用 OpenSpec 固化正式规格，用 Superpower 拆解执行计划，用 Claude Code 按计划编码和验证。
+</pre></table></code></div></div></div><div class="post-tail-wrapper text-muted"><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/ai/" class="post-tag no-text-decoration" >AI</a> <a href="/tags/claudecode/" class="post-tag no-text-decoration" >ClaudeCode</a> <a href="/tags/openspec/" class="post-tag no-text-decoration" >OpenSpec</a> <a href="/tags/%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B/" class="post-tag no-text-decoration" >开发流程</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> 本文由作者按照 <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> 进行授权</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">分享</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=OpenSpec、Superpower 与 Claude Code 协作开发模式说明 - 爱喝馄饨的小陈&amp;url=/posts/OpenSpec-Superpower%E4%B8%8EClaudeCode%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E8%AF%B4%E6%98%8E/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=OpenSpec、Superpower 与 Claude Code 协作开发模式说明 - 爱喝馄饨的小陈&amp;u=/posts/OpenSpec-Superpower%E4%B8%8EClaudeCode%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E8%AF%B4%E6%98%8E/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=/posts/OpenSpec-Superpower%E4%B8%8EClaudeCode%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E8%AF%B4%E6%98%8E/&amp;text=OpenSpec、Superpower 与 Claude Code 协作开发模式说明 - 爱喝馄饨的小陈" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="分享链接" data-title-succeed="链接已复制！"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access"><div id="access-lastmod" class="post"><div class="panel-heading">最近更新</div><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/python%E5%BE%AE%E4%BF%A1%E8%87%AA%E5%8A%A8%E5%8C%96%E6%A1%86%E6%9E%B6wxauto%E8%BF%9B%E8%A1%8C%E6%B6%88%E6%81%AF%E9%87%87%E9%9B%86%E8%BD%AC%E5%8F%91/">python微信自动化框架wxauto进行消息采集转发</a><li><a href="/posts/docker%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85%E4%BB%A5%E5%8F%8A%E5%B8%B8%E8%A7%81%E4%B8%AD%E9%97%B4%E4%BB%B6%E9%83%A8%E7%BD%B2/">docker环境安装以及常见中间件部署</a><li><a href="/posts/kkFileView%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E4%BC%98%E9%9B%85%E9%A2%84%E8%A7%88%E6%B0%B4%E5%8D%B0/">kkFileView实现文件优雅预览水印</a><li><a href="/posts/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-oauth2%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B/">【源码分析】springsecurity oauth2认证流程</a><li><a href="/posts/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-springsecurity%E5%AF%86%E7%A0%81%E6%A8%A1%E5%BC%8F%E5%A6%82%E4%BD%95%E6%A0%A1%E9%AA%8C%E5%AF%86%E7%A0%81/">【源码分析】springsecurity密码模式校验密码</a></ul></div><div id="access-tags"><div class="panel-heading">热门标签</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/%E8%BF%90%E7%BB%B4/">运维</a> <a class="post-tag" href="/tags/java/">java</a> <a class="post-tag" href="/tags/docker/">docker</a> <a class="post-tag" href="/tags/oauth2/">oauth2</a> <a class="post-tag" href="/tags/linux/">linux</a> <a class="post-tag" href="/tags/springboot/">springboot</a> <a class="post-tag" href="/tags/springsecurity/">springsecurity</a> <a class="post-tag" href="/tags/mac/">mac</a> <a class="post-tag" href="/tags/mysql/">mysql</a> <a class="post-tag" href="/tags/python/">python</a></div></div></div><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><div class="panel-heading pl-3 pt-2 mb-2">文章内容</div><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>相关文章</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/%E5%8F%88%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%A4%8D%E6%9D%82%E9%A1%B9%E7%9B%AE%E8%BF%81%E7%A7%BB/"><div class="card-body"> <em class="timeago small" data-ts="1718209245" > 2024-06-13 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>又记一次复杂项目迁移</h3><div class="text-muted small"><p> 前言 是的，项目迁移它又来了，还是22年那个项目，不同的是公司上了devops，所有组件都容器化了，免去了安装的过程，但是文件还得迁移那，又是罪恶滔天的fdfs，文件存的很凌乱，有的在富文本里有的在结构化数据库里，但不同的是我学会了python，py真的天下第一,太方便了家人们。这次解决问题的思路如下: 导出全量sql python正则选取文件url [re] 下载再上传 [r...</p></div></div></a></div><div class="card"> <a href="/posts/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-logback%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE%E5%8F%8A%E5%AD%98%E5%82%A8/"><div class="card-body"> <em class="timeago small" data-ts="1712805127" > 2024-04-11 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>【源码分析】logback日志配置及存储</h3><div class="text-muted small"><p> 起因 linux系统中springboot日志文件默认存在/tmp下，那么为什么会存储在这个位置呢,查阅可知 org/springframework/boot/logging/logback/base.xml 进行了相关定义 同时查看logback日志配置文件会有疑问，有些变量取自于defauts.xml中自定义，这些日志中的变量到底哪里来的呢。 源...</p></div></div></a></div><div class="card"> <a href="/posts/python%E5%BE%AE%E4%BF%A1%E8%87%AA%E5%8A%A8%E5%8C%96%E6%A1%86%E6%9E%B6wxauto%E8%BF%9B%E8%A1%8C%E6%B6%88%E6%81%AF%E9%87%87%E9%9B%86%E8%BD%AC%E5%8F%91/"><div class="card-body"> <em class="timeago small" data-ts="1709798857" > 2024-03-07 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>python微信自动化框架wxauto进行消息采集转发</h3><div class="text-muted small"><p> 需求 采集大群中含关键词的聊天记录，并进行自定义消息处理「脱敏、添加」，然后转发至指定群聊；同时存储信息至redis key为当天日期的set，判重发送 定时任务，每天定时发送公告，公告文件为txt 环境 微信版本: 3.9.8.15 python版本: 3.11.6 wxauto版本: 3.9.8 服务器版本: 阿里云 2核4g windows 2012 源码 fr...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/%E5%8F%88%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%A4%8D%E6%9D%82%E9%A1%B9%E7%9B%AE%E8%BF%81%E7%A7%BB/" class="btn btn-outline-primary" prompt="上一篇"><p>又记一次复杂项目迁移</p></a> <span class="btn btn-outline-primary disabled" prompt="下一篇"><p>-</p></span></div><script type="text/javascript"> $(function () { const origin = "https://giscus.app"; const iframe = "iframe.giscus-frame"; const lightTheme = "light"; const darkTheme = "dark_dimmed"; let initTheme = lightTheme; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = darkTheme; } let giscusAttributes = { "src": "https://giscus.app/client.js", "data-repo": "chen2gou/chen2gou.github.io", "data-repo-id": "R_kgDOG2L1lQ", "data-category": "General", "data-category-id": "DIC_kwDOG2L1lc4CBLyx", "data-mapping": "title", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-theme": initTheme, "data-input-position": "bottom", "data-lang": "zh-CN", "crossorigin": "anonymous", "async": "" }; let giscusScript = document.createElement("script"); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value)); document.getElementById("tail-wrapper").appendChild(giscusScript); addEventListener("message", (event) => { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { /* global theme mode changed */ const mode = event.data.message; const theme = (mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme); const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); }); </script></div></div></div><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted"><div class="footer-left"><p class="mb-0"> © 2026 <a href="https://twitter.com/username">chengao</a>. <span data-toggle="tooltip" data-placement="top" title="除非另有说明，本网站上的博客文章均由作者按照知识共享署名 4.0 国际 (CC BY 4.0) 许可协议进行授权。">保留部分权利。</span></p></div><div class="footer-right"><p class="mb-0"> 本站由 <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> 生成，采用 <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> 主题。</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><div id="access-tags"><div class="panel-heading">热门标签</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/%E8%BF%90%E7%BB%B4/">运维</a> <a class="post-tag" href="/tags/java/">java</a> <a class="post-tag" href="/tags/docker/">docker</a> <a class="post-tag" href="/tags/oauth2/">oauth2</a> <a class="post-tag" href="/tags/linux/">linux</a> <a class="post-tag" href="/tags/springboot/">springboot</a> <a class="post-tag" href="/tags/springsecurity/">springsecurity</a> <a class="post-tag" href="/tags/mac/">mac</a> <a class="post-tag" href="/tags/mysql/">mysql</a> <a class="post-tag" href="/tags/python/">python</a></div></div></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">搜索结果为空</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>
